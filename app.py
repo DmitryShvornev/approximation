@@ -22,6 +22,15 @@ ax1.set_title("Метод поточечной коллокации")
 ax2.set_title("Метод коллокаций по областям")
 ax3.set_title("Метод Галеркина")
 
+
+fig1 = plt.figure(figsize=(18, 16))
+ax1_1 = plt.subplot2grid(gridsize, (0, 0))
+ax2_1 = plt.subplot2grid(gridsize, (0, 1))
+ax3_1 = plt.subplot2grid(gridsize, (0, 2))
+ax1_1.set_title("Метод поточечной коллокации")
+ax2_1.set_title("Метод коллокаций по областям")
+ax3_1.set_title("Метод Галеркина")
+
 # Метод поточечной коллокации
 print("Метод поточечной коллокации")
 K = np.array([[0.1951, -0.5556, 0.8315, -0.9808],
@@ -36,18 +45,19 @@ A = [a[0][0],a[1][0],a[2][0],a[3][0]]
 
 # функция, выводящая  на график результат аппроксимации
 # а также исходную функцию
-def form_result(ax_i, A):
+def form_result(ax_i, ax_j, A):
     def f(x):
         res = 0
         for n in range(1, 5):
             res += A[n - 1] * N(x,n)
         return res
-    F = [f(x) for x in np.linspace(bound_d, bound_u, 1001)]
-    F1 = [psi(x) for x in np.linspace(bound_d, bound_u, 1001)]
+    F = np.array([f(x) for x in np.linspace(bound_d, bound_u, 1001)])
+    F1 = np.array([psi(x) for x in np.linspace(bound_d, bound_u, 1001)])
     ax_i.plot(np.linspace(bound_d, bound_u, 1001), F)
     ax_i.plot(np.linspace(bound_d, bound_u, 1001), F1)
+    ax_j.plot(np.linspace(bound_d, bound_u, 1001), F1-F)
 
-form_result(ax1,A)
+form_result(ax1,ax1_1,A)
 
 # Метод коллокаций по областям
 print("Метод коллокаций по областям")
@@ -62,7 +72,7 @@ print(b)
 a = np.dot(np.linalg.inv(K),b)
 print(a)
 A = [a[0],a[1],a[2],a[3]]
-form_result(ax2, A)
+form_result(ax2,ax2_1, A)
 
 # Метод Галеркина
 print("Метод Галеркина")
@@ -77,7 +87,7 @@ print(b)
 a = np.dot(np.linalg.inv(K),b)
 print(a)
 A = [a[0],a[1],a[2],a[3]]
-form_result(ax3, A)
+form_result(ax3,ax3_1, A)
 
 plt.show()
 
